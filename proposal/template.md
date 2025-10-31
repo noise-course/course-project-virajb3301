@@ -1,28 +1,25 @@
-# Synthetic Application-Labeled Traffic Generator for pcapng
+# ML/Net Leaderboard: Reproducing & Extending ML for Networking with nPrint/pcapML
 
 ## Project Participants
 
 | First Name | Last Name | cnet ID | Project Role |
 | ---------- | --------- | ------- | ------------ |
-|   Viraj    | Bodiwala  |  virajb |   Student    |
+| Viraj      | Bodiwala  | virajb  | Student      |
 
 ## Project Description
 
-This project generates realistic **synthetic network traffic traces** that are already **labeled by application** (e.g., Netflix, Zoom, generic web browsing) and written directly into **pcapng** files. The problem is that ML for networking (traffic classification, QoE inference, anomaly detection) needs per-flow ground-truth labels, but real traces are private, labels are noisy, and collecting enough data per app is slow and expensive. We address this by learning the statistical behavior of real app traffic (packet sizes, inter-arrival times, burst patterns, up/down ratios, durations) and sampling new “fake” flows that closely resemble the originals; we then serialize packets to pcapng and embed labels via comment/custom option fields so tools like Wireshark or Python parsers can recover them without external CSVs. This sits squarely at the **networking × ML** intersection (synthetic data for supervised learning and model bootstrapping). Related work includes traditional traffic classification datasets and generative/simulation approaches to trace synthesis; we build a lightweight, engineering-first generator and labeling pipeline. Our goal is **research-style**: quantify realism and usefulness of synthetic traces and validate an embedding scheme that keeps labels with the packets. The quarter scope is feasible via statistical baselines (histograms/KDE/GMM) with an optional stretch to simple sequence models (LSTM/1D-CNN); known limitations (e.g., imperfect TCP dynamics, local overfitting, tool support for custom pcapng options) are documented for future work.
+This project builds a **reproducible ML/Net leaderboard** using **nPrint** and **pcapML** to **re-produce or extend** the best-known results across classic ML-for-networking tasks (traffic classification, QoE inference, anomaly detection, encrypted flow ID). The core problem is that results are hard to compare due to fragmented datasets, inconsistent feature extraction, and non-reproducible pipelines. This matters because networking operations and security increasingly rely on ML; without apples-to-apples benchmarking, reported gains can be noisy or non-transferable. We will follow the nPrint leaderboard directions, standardize data prep and feature generation with nPrint/pcapML, and evaluate models under rigorous splits (random, cross-capture/network, temporal). This sits squarely at the **networking × ML** intersection, emphasizing clean feature representations, reproducibility, and generalization. Related work includes the nPrint leaderboard, pcapML/NetML libraries, and prior SOTA papers; our contribution is a documented reproduction plus targeted extensions (feature variants, stronger evaluation splits, lightweight model improvements). The goal is **research-style reproducibility with extensions**: match reported numbers where possible, explain discrepancies, and push robustness or accuracy in at least one task with modest, well-justified changes.
 
 ## Data
 
-* Short, **controlled captures** per target application (e.g., streaming Netflix, active Zoom call, basic web browsing).
-* Extracted **per-flow features**: packet size distributions, inter-arrival timing, durations, total bytes up/down, burstiness, upload/download ratios.
-* Held-out **real flows** per application for evaluation (realism metrics and generalization tests).
+* Public packet/flow traces linked from the **nPrint leaderboard** and compatible with **nPrint/pcapML** (labeled app/QoE tasks where available).
+* Derived **packet/flow features** via nPrint (signatures) and pcapML tensors/tables.
+* Evaluation splits: **random (in-distribution)**, **cross-capture / cross-network**, and **temporal (train-past/test-future)**.
 
 ## Deliverables
 
-* **Python tool** that emits synthetic, application-labeled **pcapng** for a requested application (labels embedded via pcapng comment/custom option fields).
-* **Example generated traces** for each supported application.
-* **Evaluation report**:
-
-  * *Realism*: distributional comparisons (e.g., KL divergence on size histograms, duration/throughput deltas, visual burst patterns).
-  * *Usefulness*: train classifiers (RF/SVM/MLP) **only on synthetic flows**, test on held-out real flows (accuracy, confusion matrix).
-  * *Labeling robustness*: ability to recover labels directly from pcapng without external CSVs.
-* **6–8 page write-up** covering motivation, method, evaluation, limitations, and future work.
+* **Clean Jupyter notebook** (restart-and-run-all) that downloads/preps data, runs nPrint/pcapML, trains models, and reports results.
+* **Project report (Sphinx)** with clear, portfolio-quality documentation and inline code/configs (Conda/Docker, seeds, exact CLI).
+* **Leaderboard table** comparing reproduced results vs. reported results and our extensions (accuracy/F1/AUROC, variance across seeds/splits).
+* **Ablations & analysis**: impact of feature representations, split choice, and simple model changes (e.g., RF/SVM/MLP vs. small 1D-CNN/Transformer).
+* **One-click environment** (Conda/Docker + Makefile/CLI) and pointers to any required datasets.
