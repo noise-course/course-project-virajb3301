@@ -25,4 +25,4 @@ This project generates realistic **synthetic network traffic traces** that are a
   * *Realism*: distributional comparisons (e.g., KL divergence on size histograms, duration/throughput deltas, visual burst patterns).
   * *Usefulness*: train classifiers (RF/SVM/MLP) **only on synthetic flows**, test on held-out real flows (accuracy, confusion matrix).
   * *Labeling robustness*: ability to recover labels directly from pcapng without external CSVs.
-* **6–8 page write-up** covering motivation, method, evaluation, limitations, and future work, plus an **optional live demo** opening a generated capture in Wireshark and inspecting embedded labels.
+* **6–8 page write-up** covering motivation, method, evaluation, limitations, and future work.
