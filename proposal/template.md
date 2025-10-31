@@ -4,7 +4,7 @@
 
 | First Name | Last Name | cnet ID | Project Role |
 | ---------- | --------- | ------- | ------------ |
-| Viraj      | Bodiwala  | virajb  | Student      |
+| Viraj      | Bodiwala  | virajb  | Lead         |
 
 ## Project Description
 
